@@ -8,7 +8,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const portName = '/dev/ttyS7'
+const portName = '/dev/ttyUSB0'
 
 var serialPort = new SerialPort({ path: portName, baudRate: 115200 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
@@ -23,9 +23,9 @@ const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 // Listen for incoming serial data
  parser.on('data', (data) => {
-   const [number1, number2] = data.split(',').map(Number);
+   const [number1, number2, state] = data.split(',');
 
-   io.emit('updateNumbers', { number1, number2 });
+   io.emit('updateNumbers', { number1, number2, state });
  });
 
 // Set up Socket.io connection

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Serial Port Data Display</title>
+  <title>Automatic ping pong score keeper</title>
   <style>
     body {
       display: flex;
@@ -38,6 +38,8 @@
   <div class="state-container" id="state" style="background-color:MediumSeaGreen">Choose a side!</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
@@ -45,6 +47,18 @@
       document.getElementById('number1').innerText = `Player 1: ${number1}`;
       document.getElementById('number2').innerText = `Player 2: ${number2}`;
       document.getElementById('state').innerText = `Game state: ${state}`;
+    });
+
+    // Handle the requestPortName event
+    socket.on('requestPortName', () => {
+      const newPortName = prompt('Please enter the portName:');
+      socket.emit('submitPortName', newPortName);
+    });
+
+    // Handle other events as needed
+    socket.on('updateNumbers', (data) => {
+      // Update your UI with the received data
+      console.log('Received updateNumbers:', data);
     });
   </script>
 </body>

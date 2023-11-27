@@ -8,39 +8,52 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-const portName = '/dev/ttyUSB0'
+var portName = '/dev/ttyUSB0'
+var portFound = true;
 
-// Exception hndler
+// Exception handler
 process.on('uncaughtException', function (err) {
   console.log(err);
   console.log("Node NOT Exiting...");
+  portFound = false;
 });
 
 var serialPort = new SerialPort({ path: portName, baudRate: 115200 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 // Serve static files from the 'public' folder
- app.use(express.static('public'));
+app.use(express.static('public'));
 
 // Set up a route for the web page
- app.get('/', (req, res) => {
-   res.sendFile(__dirname + '/index.html');
- });
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
 // Listen for incoming serial data
- parser.on('data', (data) => {
-   const [number1, number2, state] = data.split(',');
+parser.on('data', (data) => {
+  const [number1, number2, state] = data.split(',');
 
-   io.emit('updateNumbers', { number1, number2, state });
- });
+  io.emit('updateNumbers', { number1, number2, state });
+});
 
 // Set up Socket.io connection
 io.on('connection', (socket) => {
-   console.log('A user connected');
-  
+  console.log('A user connected');
+  if (!portFound) {
+    // Send a message to the client to prompt for portName
+    socket.emit('requestPortName');
+  }
+
+  // Handle user input for portName
+  socket.on('submitPortName', (newPortName) => {
+    portName = newPortName;
+    serialPort = new SerialPort({ path: portName, baudRate: 115200 });
+    portFound = true;
+  });
+
   // Disconnect event
-   socket.on('disconnect', () => {
-     console.log('User disconnected');
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
   });
 });
 

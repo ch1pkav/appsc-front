@@ -10,6 +10,12 @@ const io = socketIO(server);
 
 const portName = '/dev/ttyUSB0'
 
+// Exception hndler
+process.on('uncaughtException', function (err) {
+  console.log(err);
+  console.log("Node NOT Exiting...");
+});
+
 var serialPort = new SerialPort({ path: portName, baudRate: 115200 });
 const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
@@ -32,8 +38,6 @@ const parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 io.on('connection', (socket) => {
    console.log('A user connected');
   
-  // You can add additional socket-related logic here if needed
-
   // Disconnect event
    socket.on('disconnect', () => {
      console.log('User disconnected');

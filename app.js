@@ -7,6 +7,8 @@ const socketIO = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const noDeviceStr = 'No device connected';
+const zeroScore = '0';
 
 var portName = '/dev/ttyUSB0'
 var portFound = true;
@@ -16,6 +18,7 @@ process.on('uncaughtException', function (err) {
   console.log(err);
   console.log("Node NOT Exiting...");
   portFound = false;
+  io.emit('updateNumbers', { zeroScore, zeroScore, noDeviceStr });
 });
 
 var serialPort = new SerialPort({ path: portName, baudRate: 115200 });
@@ -49,6 +52,7 @@ io.on('connection', (socket) => {
     portName = newPortName;
     serialPort = new SerialPort({ path: portName, baudRate: 115200 });
     portFound = true;
+    io.emit('updateNumbers', { zeroScore, zeroScore, noDeviceStr });
   });
 
   // Disconnect event

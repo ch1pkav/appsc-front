@@ -1,16 +1,37 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <title>Serial Port Reader</title>
+  <title>Serial Port Data Display</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .number-container {
+      font-size: 3em;
+      text-align: center;
+      width: 45%;
+    }
+  </style>
 </head>
 <body>
-  <div id="leftNumber" class="number">0</div>
-  <div id="rightNumber" class="number">0</div>
-  <script src="main.js"></script>
+  <div class="number-container" id="number1">Number 1: </div>
+  <div class="number-container" id="number2">Number 2: </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    socket.on('updateNumbers', ({ number1, number2 }) => {
+      document.getElementById('number1').innerText = `Number 1: ${number1}`;
+      document.getElementById('number2').innerText = `Number 2: ${number2}`;
+    });
+  </script>
 </body>
 </html>
 

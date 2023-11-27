@@ -1,15 +1,17 @@
 {
   "name": "appsc-front",
   "version": "1.0.0",
-  "description": "frontend for automatic ping pong score keeper",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ch1pkav",
-  "license": "GPL-3.0",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "serialport": "^12.0.0"
+    "serialport": "^10.5.0",
+    "socket.io": "^4.7.2"
   }
 }

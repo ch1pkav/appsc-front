@@ -20,16 +20,16 @@
   </style>
 </head>
 <body>
-  <div class="number-container" id="number1">Number 1: </div>
-  <div class="number-container" id="number2">Number 2: </div>
+  <div class="number-container" id="number1" style="background-color:Tomato">Player 1: </div>
+  <div class="number-container" id="number2" style="background-color:DodgerBlue">Player 2: </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
   <script>
     const socket = io();
 
     socket.on('updateNumbers', ({ number1, number2 }) => {
-      document.getElementById('number1').innerText = `Number 1: ${number1}`;
-      document.getElementById('number2').innerText = `Number 2: ${number2}`;
+      document.getElementById('number1').innerText = `Player 1: ${number1}`;
+      document.getElementById('number2').innerText = `Player 2: ${number2}`;
     });
   </script>
 </body>
